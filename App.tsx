@@ -1,16 +1,31 @@
 import { StatusBar } from "expo-status-bar";
-import { View, Text, StyleSheet, SafeAreaView } from "react-native";
-import { TestComp } from "./components/test-comp/TestComp";
+import { View, StyleSheet, SafeAreaView } from "react-native";
+import SplashScreen from "./screens/splash-screen/SplashScreen";
+import { useEffect, useState } from "react";
 import { useFonts } from "expo-font";
 
 export default function App() {
-  const [fontsLoaded] = useFonts({
-    "Roboto Condensed": require("./assets/fonts/RobotoCondensed-Regular.ttf"),
+  const [isLoaded, setIsLoaded] = useState<boolean>(false);
+  const [fontLoaded] = useFonts({
+    "Roboto-Condensed-Thin": require("./assets/fonts/RobotoCondensed-Thin.ttf"),
+    "Roboto-Condensed": require("./assets/fonts/RobotoCondensed-Medium.ttf"),
+    "Roboto-Condensed-Light": require("./assets/fonts/RobotoCondensed-Light.ttf"),
   });
+
+  const loadSplashScreen = (): void => {
+    setIsLoaded(false);
+    setTimeout(() => {
+      setIsLoaded(true);
+    }, 4000);
+  };
+  useEffect(() => {
+    loadSplashScreen();
+  }, []);
   return (
     <SafeAreaView style={style.safeContainer}>
       <View style={style.mainContainer}>
-        <TestComp />
+        {/* {!isLoaded && <SplashScreen />} */}
+        <SplashScreen />
         <StatusBar style="auto" />
       </View>
     </SafeAreaView>
@@ -25,7 +40,5 @@ const style = StyleSheet.create({
   mainContainer: {
     flex: 1,
     backgroundColor: "#f4f4f4",
-    // color: "red",
-    // fontFamily: "Roboto Condensed",
   },
 });

@@ -24,9 +24,6 @@
     "web": {
       "favicon": "./assets/favicon.png"
     },
-    "plugins": [
-      "expo-font",
-      { "fonts": ["./assets/fonts/RobotoCondensed-Regular.ttf"] }
-    ]
+    "plugins": ["expo-font"]
   }
 }
