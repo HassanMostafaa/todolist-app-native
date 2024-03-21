@@ -1,6 +1,7 @@
 import { useFonts } from "expo-font";
 import React, { useState } from "react";
 import { View, Text, TouchableOpacity, Image } from "react-native";
+import Ionicons from "@expo/vector-icons/Ionicons";
 
 interface DropdownMenuProps {
   options: string[];
@@ -54,7 +55,11 @@ const DropdownMenu: React.FC<DropdownMenuProps> = ({
         >
           {selectedCategory || "All"}
         </Text>
-        <Text>{isOpen ? "ᐱ" : "ᐯ"}</Text>
+        {isOpen ? (
+          <Ionicons name="chevron-up" size={22} />
+        ) : (
+          <Ionicons name="chevron-down" size={22} />
+        )}
       </TouchableOpacity>
       {isOpen && (
         <View
