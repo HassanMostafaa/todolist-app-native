@@ -1,20 +1,45 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import { StatusBar } from "expo-status-bar";
+import { View, StyleSheet, SafeAreaView } from "react-native";
+import SplashScreen from "./screens/splash-screen/SplashScreen";
+import { useEffect, useState } from "react";
+import { useFonts } from "expo-font";
+import Home from "./screens/home/Home";
 
 export default function App() {
+  const [isLoaded, setIsLoaded] = useState<boolean>(false);
+  const [fontLoaded] = useFonts({
+    "Roboto-Condensed-Thin": require("./assets/fonts/RobotoCondensed-Thin.ttf"),
+    "Roboto-Condensed": require("./assets/fonts/RobotoCondensed-Medium.ttf"),
+    "Roboto-Condensed-Light": require("./assets/fonts/RobotoCondensed-Light.ttf"),
+  });
+
+  const loadSplashScreen = (): void => {
+    setIsLoaded(false);
+    setTimeout(() => {
+      setIsLoaded(true);
+    }, 2400);
+  };
+  useEffect(() => {
+    loadSplashScreen();
+  }, []);
   return (
-    <View style={styles.container}>
-      <Text>Open up App.tsx to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
+    <SafeAreaView style={style.safeContainer}>
+      <View style={style.mainContainer}>
+        {/* {!isLoaded && fontLoaded && <SplashScreen />} */}
+        {!isLoaded ? <SplashScreen /> : <Home />}
+        <StatusBar style="auto" />
+      </View>
+    </SafeAreaView>
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
+const style = StyleSheet.create({
+  safeContainer: {
     flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
+    backgroundColor: "#f4f4f4",
+  },
+  mainContainer: {
+    flex: 1,
+    backgroundColor: "#f4f4f4",
   },
 });
