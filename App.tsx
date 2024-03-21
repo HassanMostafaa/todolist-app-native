@@ -3,6 +3,7 @@ import { View, StyleSheet, SafeAreaView } from "react-native";
 import SplashScreen from "./screens/splash-screen/SplashScreen";
 import { useEffect, useState } from "react";
 import { useFonts } from "expo-font";
+import Home from "./screens/home/Home";
 
 export default function App() {
   const [isLoaded, setIsLoaded] = useState<boolean>(false);
@@ -16,7 +17,7 @@ export default function App() {
     setIsLoaded(false);
     setTimeout(() => {
       setIsLoaded(true);
-    }, 4000);
+    }, 2400);
   };
   useEffect(() => {
     loadSplashScreen();
@@ -24,8 +25,8 @@ export default function App() {
   return (
     <SafeAreaView style={style.safeContainer}>
       <View style={style.mainContainer}>
-        {/* {!isLoaded && <SplashScreen />} */}
-        <SplashScreen />
+        {/* {!isLoaded && fontLoaded && <SplashScreen />} */}
+        {!isLoaded ? <SplashScreen /> : <Home />}
         <StatusBar style="auto" />
       </View>
     </SafeAreaView>

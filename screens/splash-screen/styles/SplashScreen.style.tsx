@@ -3,11 +3,10 @@ import { StyleSheet } from "react-native";
 export const style = StyleSheet.create({
   container: {
     flex: 1,
-    paddingHorizontal: 36,
     backgroundColor: "#f4f4f4",
-    width: "100%",
   },
   title: {
+    paddingHorizontal: 36,
     marginTop: 28,
     marginBottom: 70,
     color: "#333",
@@ -16,11 +15,11 @@ export const style = StyleSheet.create({
     letterSpacing: -5,
   },
   progressBar: {
-    position: "absolute",
     top: 0,
     left: 0,
     height: 5,
     width: "100%",
-    backgroundColor: "red",
+    backgroundColor: "#FFDBA1",
+    borderBottomWidth: 1,
   },
 });

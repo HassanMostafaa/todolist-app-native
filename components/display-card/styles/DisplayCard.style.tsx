@@ -10,8 +10,6 @@ const style = ({ noteColor }: { noteColor?: INoteColor }) =>
       borderWidth: 1,
       borderColor: "#333333d8",
       backgroundColor: noteColor,
-      maxWidth: 200,
-      width: "40%",
       padding: 12,
       borderRadius: 12,
       shadowColor: "#555",
