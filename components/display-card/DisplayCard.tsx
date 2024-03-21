@@ -4,11 +4,12 @@ import { formatDate } from "../../helpers/date-helper";
 import { useFonts } from "expo-font";
 import style from "./styles/DisplayCard.style";
 
-export const DisplayCard: FunctionComponent<IDisplayCard | INote> = ({
+export const DisplayCard: FunctionComponent<INote> = ({
   createdAt,
   text,
   title,
   icon,
+  category,
   noteColor,
 }) => {
   const [fontLoaded] = useFonts({
@@ -20,6 +21,13 @@ export const DisplayCard: FunctionComponent<IDisplayCard | INote> = ({
   return (
     <View style={[style({ noteColor }).container]}>
       <View style={style({}).cardHeader}>
+        {category && (
+          <Text
+            style={{ textAlign: "right", fontFamily: "Roboto-Condensed-Thin" }}
+          >
+            {category}
+          </Text>
+        )}
         {title && <Text style={[font, style({}).cardTitle]}>{title}</Text>}
         {createdAt && (
           <Text style={[font, style({}).date]}>{formatDate(createdAt)}</Text>

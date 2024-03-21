@@ -1,10 +1,10 @@
-import { View, Text, FlatList, Platform, TouchableOpacity } from "react-native";
+import { View, FlatList } from "react-native";
 import { style } from "./styles/Home.style";
 import AddTodoBtn from "../../components/add-todo-button/AddTodoBtn";
 import DropdownMenu from "../../components/dropdown-menu/DropdownMenu";
 import { useState } from "react";
 import { DisplayCard } from "../../components/display-card/DisplayCard";
-import { testNotes } from "../../data.test";
+// import { testNotes } from "../../data.test";
 import EmptyList from "../../components/empty-list/EmptyList";
 
 function Home() {
@@ -31,9 +31,9 @@ function Home() {
           <FlatList
             style={style.flatList}
             data={notes}
-            keyExtractor={(item, index) => index.toString()}
+            keyExtractor={(index) => index.toString()}
             numColumns={2}
-            renderItem={({ item, index }) => <DisplayCard {...item} />}
+            renderItem={({ item }) => <DisplayCard {...item} />}
           />
         </View>
       ) : (
