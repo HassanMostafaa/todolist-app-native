@@ -40,11 +40,13 @@ function SplashScreen() {
         }}
       >
         <DisplayCard
+          category="Fitness"
           title={"Splash screen diaply card"}
           createdAt={new Date()}
           text={
             "Don't mind this minor text just a placeholder just for show on the splash screen. only five centuries, but also"
           }
+          key={"1"}
           noteColor={"#FFDBA1"}
         />
       </View>
@@ -57,6 +59,8 @@ function SplashScreen() {
         }}
       >
         <DisplayCard
+          category="Personal"
+          key={"2"}
           title={"Splash screen diaply card"}
           createdAt={new Date()}
           text={

@@ -25,8 +25,8 @@ export default function App() {
   return (
     <SafeAreaView style={style.safeContainer}>
       <View style={style.mainContainer}>
-        {/* {!isLoaded && fontLoaded && <SplashScreen />} */}
-        {!isLoaded ? <SplashScreen /> : <Home />}
+        {!isLoaded && fontLoaded ? <SplashScreen /> : <Home />}
+        {/* {!isLoaded ? <SplashScreen /> : <Home />} */}
         <StatusBar style="auto" />
       </View>
     </SafeAreaView>
