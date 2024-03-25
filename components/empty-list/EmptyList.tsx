@@ -11,9 +11,9 @@ const EmptyList = () => {
   return (
     <View style={styles.container}>
       <Text style={styles.text}>No notes created yet</Text>
-      <View style={styles.imageContainer}>
+      {/* <View style={styles.imageContainer}>
         <Image source={emptyListImg} style={styles.image} />
-      </View>
+      </View> */}
     </View>
   );
 };

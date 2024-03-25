@@ -10,6 +10,7 @@ export const testNotes: INote[] = [
     category: "Fitness",
     text: "note 2 body of text making this take a bit of a space",
     createdAt: new Date(),
+    noteColor: "#B7E0F6",
   },
   {
     title: "note3",

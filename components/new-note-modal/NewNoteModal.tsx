@@ -16,7 +16,10 @@ import { categories } from "../../screens/home/Home";
 
 interface IModalProps {
   visible: boolean;
+  setNotes: React.Dispatch<React.SetStateAction<INote[]>>;
   setShowNewNoteModal: React.Dispatch<React.SetStateAction<boolean>>;
+  selectedCategory: ICategory;
+  setSelectedCategory: React.Dispatch<React.SetStateAction<ICategory>>;
 }
 
 type ButtonProps = {
@@ -50,12 +53,37 @@ export const CategoryButton: React.FC<ButtonProps> = ({
 export const NewNoteModal: FunctionComponent<IModalProps> = ({
   visible,
   setShowNewNoteModal,
+  setNotes,
+  selectedCategory,
+  setSelectedCategory,
 }) => {
   const closeModal = (): void => setShowNewNoteModal(false);
 
-  const [selectedCategory, setSelectedCategory] = useState<ICategory>(
-    categories[0]
-  );
+  const [note, setNote] = useState<INote>({
+    category: selectedCategory,
+    createdAt: new Date(),
+    text: "",
+    title: "",
+    noteColor: "#A3FF94",
+  });
+
+  const addNote = (): void => {
+    console.log({ note });
+
+    setNotes((prev) => [...prev, note]);
+    setNote({
+      category: selectedCategory,
+      createdAt: new Date(),
+      text: "",
+      title: "",
+      noteColor: "#A3FF94",
+    });
+    setTimeout(() => {
+      setShowNewNoteModal(false);
+    }, 0);
+  };
+
+  const colors: INoteColor[] = ["#A3FF94", "#B7E0F6", "#C9AAF0", "#FFDBA1"];
 
   return (
     <Modal
@@ -67,16 +95,36 @@ export const NewNoteModal: FunctionComponent<IModalProps> = ({
       <SafeAreaView style={{ flex: 1 }}>
         <View style={style({}).container}>
           <View>
+            {/* <Text style={{ marginLeft: 12 }}>Note Category</Text> */}
             <ScrollView horizontal showsHorizontalScrollIndicator={false}>
               {categories?.map((category, index) => (
                 <CategoryButton
                   key={index}
                   label={category}
                   selectedCategory={selectedCategory}
-                  onPress={() => setSelectedCategory(category)}
+                  onPress={() => {
+                    setSelectedCategory(category),
+                      setNote((prev) => ({ ...prev, category }));
+                  }}
                 />
               ))}
             </ScrollView>
+          </View>
+          <View style={style({}).colorsContainer}>
+            {colors.map((color, index) => (
+              <Pressable
+                key={index}
+                onPress={() =>
+                  setNote((prev) => ({ ...prev, noteColor: color }))
+                }
+                style={
+                  style({
+                    colorSelector: color,
+                    colorSelected: color === note.noteColor,
+                  }).color
+                }
+              ></Pressable>
+            ))}
           </View>
           <TextInput
             style={style({}).input}
@@ -84,6 +132,8 @@ export const NewNoteModal: FunctionComponent<IModalProps> = ({
             placeholder="Note Subject (Optional)"
             autoCapitalize="none"
             autoCorrect={false}
+            value={note.title}
+            onChangeText={(title) => setNote((prev) => ({ ...prev, title }))}
           />
           <View style={{ flex: 1 }}>
             <TextInput
@@ -97,6 +147,8 @@ export const NewNoteModal: FunctionComponent<IModalProps> = ({
               onSubmitEditing={() => {
                 Keyboard.dismiss();
               }}
+              value={note.text}
+              onChangeText={(text) => setNote((prev) => ({ ...prev, text }))}
               style={[style({}).input, style({}).multiLineInput]}
             />
           </View>
@@ -117,10 +169,8 @@ export const NewNoteModal: FunctionComponent<IModalProps> = ({
             </TouchableOpacity>
           </Pressable>
           <Pressable
-            onPress={() => {
-              setShowNewNoteModal(false);
-            }}
-            style={[style({}).callToAction, { backgroundColor: "#cfff47" }]}
+            onPress={() => addNote()}
+            style={[style({}).callToAction, { backgroundColor: "#a2cffe" }]}
           >
             <TouchableOpacity>
               <Text
@@ -138,14 +188,21 @@ export const NewNoteModal: FunctionComponent<IModalProps> = ({
 
 export default NewNoteModal;
 
-const style = ({ isCategorySelected }: { isCategorySelected?: boolean }) =>
+const style = ({
+  isCategorySelected,
+  colorSelector,
+  colorSelected,
+}: {
+  isCategorySelected?: boolean;
+  colorSelector?: string;
+  colorSelected?: boolean;
+}) =>
   StyleSheet.create({
     container: {
       flex: 1,
-      paddingVertical: 12,
     },
     input: {
-      marginTop: 24,
+      marginBottom: 12,
       marginHorizontal: 12,
       borderRadius: 4,
       borderWidth: 1,
@@ -158,10 +215,11 @@ const style = ({ isCategorySelected }: { isCategorySelected?: boolean }) =>
       flex: 1,
       textAlign: "left",
       textAlignVertical: "center",
+      paddingTop: 12,
     },
     categoryButton: {
-      paddingHorizontal: 20,
-      paddingVertical: 10,
+      paddingHorizontal: 15,
+      paddingVertical: 8,
       marginHorizontal: 5,
       marginVertical: 12,
       borderRadius: 5,
@@ -169,14 +227,15 @@ const style = ({ isCategorySelected }: { isCategorySelected?: boolean }) =>
       justifyContent: "center",
       borderColor: "#999",
       alignItems: "center",
-      backgroundColor: isCategorySelected ? "#cfff47" : "transparent",
-      flex: 0,
+      backgroundColor: isCategorySelected ? "#a2cffe" : "transparent",
     },
     categoryButtonText: {
-      flex: 0,
       fontFamily: "Roboto-Condensed",
     },
-    callToActionContainer: { display: "flex", flexDirection: "row" },
+    callToActionContainer: {
+      display: "flex",
+      flexDirection: "row",
+    },
     callToAction: {
       flex: 1,
       justifyContent: "center",
@@ -187,5 +246,20 @@ const style = ({ isCategorySelected }: { isCategorySelected?: boolean }) =>
       marginHorizontal: 12,
       borderWidth: 1,
       borderColor: "#999",
+    },
+    colorsContainer: {
+      display: "flex",
+      flexDirection: "row",
+      paddingLeft: 12,
+    },
+    color: {
+      width: 30,
+      height: 30,
+      backgroundColor: colorSelector,
+      marginBottom: 12,
+      marginRight: 5,
+      borderRadius: 999,
+      borderWidth: colorSelected ? 5 : 1,
+      borderColor: "#333",
     },
   });

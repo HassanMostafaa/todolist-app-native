@@ -1,4 +1,4 @@
-import { Text, View, Animated } from "react-native";
+import { Text, View } from "react-native";
 import { style } from "./styles/SplashScreen.style";
 import { useFonts } from "expo-font";
 import { DisplayCard } from "../../components/display-card/DisplayCard";
@@ -18,6 +18,14 @@ function SplashScreen() {
       setLoaderValue((prev) => prev + 0.1);
     }, 200);
   }, []);
+
+  if (!fontLoaded) {
+    return (
+      <View>
+        <Text>...</Text>
+      </View>
+    );
+  }
   return (
     <View style={style.container}>
       <Progress.Bar
@@ -29,7 +37,7 @@ function SplashScreen() {
         color="#ffb53f"
       />
       <Text style={style.title}>
-        You suck at taking notes brother, you need us :)
+        You suck at taking notes brother, you need us.
       </Text>
       <View
         style={{
@@ -41,13 +49,11 @@ function SplashScreen() {
       >
         <DisplayCard
           category="Fitness"
-          title={"Splash screen diaply card"}
+          title="Splash screen diaply card"
           createdAt={new Date()}
-          text={
-            "Don't mind this minor text just a placeholder just for show on the splash screen. only five centuries, but also"
-          }
-          key={"1"}
-          noteColor={"#FFDBA1"}
+          text="Don't mind this minor text just a placeholder just for show on the splash screen. only five centuries, but also"
+          key="1"
+          noteColor="#FFDBA1"
         />
       </View>
       <View
@@ -60,7 +66,7 @@ function SplashScreen() {
       >
         <DisplayCard
           category="Personal"
-          key={"2"}
+          key={"2dasd"}
           title={"Splash screen diaply card"}
           createdAt={new Date()}
           text={

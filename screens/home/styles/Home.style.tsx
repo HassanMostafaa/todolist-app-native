@@ -4,9 +4,7 @@ export const style = StyleSheet.create({
     flex: 1,
   },
   flatList: {
-    marginTop: 12,
-    flexGrow: 1,
-    paddingTop: 12,
+    paddingVertical: 24,
     paddingHorizontal: 32,
   },
 });

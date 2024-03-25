@@ -1,11 +1,21 @@
-import { useFonts } from "expo-font";
-import React, { useState } from "react";
-import { View, Text, TouchableOpacity, Image } from "react-native";
-import Ionicons from "@expo/vector-icons/Ionicons";
+import React, { useState, useEffect, useRef } from "react";
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  LayoutAnimation,
+  Platform,
+  UIManager,
+  Animated,
+  StyleSheet,
+  Dimensions,
+  TouchableWithoutFeedback,
+} from "react-native";
+import { Ionicons } from "@expo/vector-icons";
 
 interface DropdownMenuProps {
-  options: string[];
-  setSelectedCategory: React.Dispatch<React.SetStateAction<string | null>>;
+  options: ICategory[];
+  setSelectedCategory: React.Dispatch<React.SetStateAction<ICategory>>;
   selectedCategory: string | null;
 }
 
@@ -14,87 +24,129 @@ const DropdownMenu: React.FC<DropdownMenuProps> = ({
   setSelectedCategory,
   selectedCategory,
 }) => {
-  const [fontLoaded] = useFonts({
-    "Roboto-Condensed-Thin": require("../../assets/fonts/RobotoCondensed-Thin.ttf"),
-    "Roboto-Condensed": require("../../assets/fonts/RobotoCondensed-Medium.ttf"),
-    "Roboto-Condensed-Light": require("../../assets/fonts/RobotoCondensed-Light.ttf"),
-  });
   const [isOpen, setIsOpen] = useState<boolean>(false);
+  const fadeAnim = useRef(new Animated.Value(0)).current;
+
+  useEffect(() => {
+    if (Platform.OS === "android") {
+      UIManager.setLayoutAnimationEnabledExperimental &&
+        UIManager.setLayoutAnimationEnabledExperimental(true);
+    }
+  }, []);
 
   const toggleDropdown = () => {
+    LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
     setIsOpen(!isOpen);
+    Animated.timing(fadeAnim, {
+      toValue: isOpen ? 0 : 1,
+      duration: 300,
+      useNativeDriver: true,
+    }).start();
   };
 
-  const handleSelectOption = (option: string) => {
+  const handleSelectOption = (option: ICategory) => {
     setSelectedCategory(option);
     setIsOpen(false);
     console.log("selected option", option);
   };
 
+  const closeDropdown = () => {
+    setIsOpen(false);
+  };
+
   return (
-    <View style={{ position: "relative" }}>
-      <TouchableOpacity
-        style={{
-          borderRadius: 4,
-          backgroundColor: "#e6e6e6",
-          padding: 12,
-          marginHorizontal: 32,
-          //   width: "40%",
-          flexDirection: "row", // Align items in a row
-          justifyContent: "space-between", // Space between text and arrow
-          alignItems: "center", // Vertically center items
-        }}
-        onPress={toggleDropdown}
-      >
-        <Text
-          style={{
-            backgroundColor: "#e6e6e6",
-            fontFamily: "Roboto-Condensed-Light",
-            fontSize: 18,
-          }}
-        >
-          {selectedCategory || "All"}
-        </Text>
-        {isOpen ? (
-          <Ionicons name="chevron-up" size={22} />
-        ) : (
-          <Ionicons name="chevron-down" size={22} />
-        )}
-      </TouchableOpacity>
-      {isOpen && (
-        <View
-          style={{
-            position: "relative",
-            top: 0,
-            marginHorizontal: 32,
-            right: 0,
-            backgroundColor: "#fff",
-            // borderRadius: 4,
-            elevation: 4,
-          }}
-        >
-          {options.map((option, index) => (
-            <TouchableOpacity
-              key={index}
-              onPress={() => handleSelectOption(option)}
-            >
-              <Text
-                style={{
-                  padding: 10,
-                  fontFamily:
-                    selectedCategory === option
-                      ? "Roboto-Condensed"
-                      : "Roboto-Condensed-Light",
-                }}
+    <TouchableWithoutFeedback onPress={closeDropdown}>
+      <View style={styles.container}>
+        <TouchableOpacity style={styles.trigger} onPress={toggleDropdown}>
+          <Text style={styles.triggerText}>{selectedCategory || "All"}</Text>
+          <Ionicons
+            name={isOpen ? "chevron-up" : "chevron-down"}
+            size={22}
+            style={styles.icon}
+          />
+        </TouchableOpacity>
+        {isOpen && (
+          <Animated.View
+            style={[
+              styles.dropdownMenu,
+              {
+                opacity: fadeAnim,
+                width: Dimensions.get("window").width - 64,
+                zIndex: 1,
+              },
+            ]}
+          >
+            {options.map((option: ICategory, index) => (
+              <TouchableOpacity
+                key={index}
+                onPress={() => handleSelectOption(option)}
+                style={styles.dropdownItem}
               >
-                {option}
-              </Text>
-            </TouchableOpacity>
-          ))}
-        </View>
-      )}
-    </View>
+                <Text
+                  style={[
+                    styles.dropdownItemText,
+                    {
+                      fontFamily:
+                        selectedCategory === option
+                          ? "Roboto-Condensed"
+                          : "Roboto-Condensed-Light",
+                      backgroundColor:
+                        selectedCategory === option
+                          ? "#a2cefe4c"
+                          : "transparent",
+                      padding: 12,
+                    },
+                  ]}
+                >
+                  {option}
+                </Text>
+              </TouchableOpacity>
+            ))}
+          </Animated.View>
+        )}
+      </View>
+    </TouchableWithoutFeedback>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    position: "relative",
+    zIndex: 1, // Ensure the dropdown is above other elements
+  },
+  trigger: {
+    borderRadius: 4,
+    backgroundColor: "#e6e6e6",
+    padding: 12,
+    marginHorizontal: 32,
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+  },
+  triggerText: {
+    backgroundColor: "#e6e6e6",
+    fontFamily: "Roboto-Condensed-Light",
+    fontSize: 18,
+  },
+  icon: {
+    backgroundColor: "#e6e6e6",
+  },
+  dropdownMenu: {
+    position: "absolute",
+    top: "100%",
+    left: 32, // Adjust as needed
+    width: Dimensions.get("window").width - 64,
+    backgroundColor: "#fff",
+    elevation: 4,
+    zIndex: 2, // Ensure the dropdown is above other elements
+  },
+  dropdownItem: {
+    // padding: 10,
+  },
+  dropdownItemText: {
+    fontFamily: "Roboto-Condensed-Light",
+    fontSize: 16,
+  },
+});
 
 export default DropdownMenu;

@@ -18,12 +18,25 @@ export const DisplayCard: FunctionComponent<INote> = ({
     "Roboto-Condensed-Light": require("../../assets/fonts/RobotoCondensed-Light.ttf"),
   });
   const font = style({}).font;
+
+  if (!fontLoaded) {
+    return (
+      <View>
+        <Text>...</Text>
+      </View>
+    );
+  }
   return (
     <View style={[style({ noteColor }).container]}>
       <View style={style({}).cardHeader}>
         {category && (
           <Text
-            style={{ textAlign: "right", fontFamily: "Roboto-Condensed-Thin" }}
+            style={{
+              position: "absolute",
+              textAlign: "right",
+              fontFamily: "Roboto-Condensed-Thin",
+              right: 0,
+            }}
           >
             {category}
           </Text>

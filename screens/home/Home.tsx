@@ -1,4 +1,4 @@
-import { View, FlatList, Text } from "react-native";
+import { View, FlatList, Text, Pressable } from "react-native";
 import { style } from "./styles/Home.style";
 import AddTodoBtn from "../../components/add-todo-button/AddTodoBtn";
 import DropdownMenu from "../../components/dropdown-menu/DropdownMenu";
@@ -19,7 +19,7 @@ export const categories: ICategory[] = [
 ];
 
 function Home() {
-  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+  const [selectedCategory, setSelectedCategory] = useState<ICategory>("All");
   const [notes, setNotes] = useState<INote[]>([]);
   const [showNewNoteModal, setShowNewNoteModal] = useState<boolean>(false);
   return (
@@ -37,7 +37,13 @@ function Home() {
             data={notes}
             keyExtractor={(index) => JSON.stringify(index)}
             numColumns={2}
-            renderItem={({ item }) => <DisplayCard {...item} />}
+            columnWrapperStyle={{ gap: 20, paddingBottom: 20 }}
+            contentContainerStyle={{ paddingBottom: 20 }}
+            renderItem={({ item }) => (
+              <Pressable style={{ flex: 1 }} onPress={() => console.log(item)}>
+                <DisplayCard {...item} />
+              </Pressable>
+            )}
           />
         </View>
       ) : (
@@ -46,6 +52,9 @@ function Home() {
       <NewNoteModal
         visible={showNewNoteModal}
         setShowNewNoteModal={setShowNewNoteModal}
+        setNotes={setNotes}
+        selectedCategory={selectedCategory}
+        setSelectedCategory={setSelectedCategory}
       />
     </View>
   );
