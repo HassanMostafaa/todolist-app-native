@@ -19,4 +19,5 @@ declare interface IDisplayCard {
 
 declare interface INote extends IDisplayCard {
   category: ICategory;
+  id: string | number[];
 }

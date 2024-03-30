@@ -2,7 +2,7 @@ import { View, FlatList, Text, Pressable } from "react-native";
 import { style } from "./styles/Home.style";
 import AddTodoBtn from "../../components/add-todo-button/AddTodoBtn";
 import DropdownMenu from "../../components/dropdown-menu/DropdownMenu";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { DisplayCard } from "../../components/display-card/DisplayCard";
 // import { testNotes } from "../../data.test";
 import EmptyList from "../../components/empty-list/EmptyList";
@@ -19,9 +19,22 @@ export const categories: ICategory[] = [
 ];
 
 function Home() {
-  const [selectedCategory, setSelectedCategory] = useState<ICategory>("All");
+  const [selectedCategory, setSelectedCategory] = useState<ICategory | null>(
+    null
+  );
   const [notes, setNotes] = useState<INote[]>([]);
   const [showNewNoteModal, setShowNewNoteModal] = useState<boolean>(false);
+
+  useEffect(() => {
+    if (!selectedCategory || selectedCategory === "All") {
+      setNotes(notes);
+    } else {
+      const filteredNotesByCategory = notes.filter(
+        (x) => x.category === selectedCategory
+      );
+      setNotes(filteredNotesByCategory);
+    }
+  }, [selectedCategory]);
   return (
     <View style={{ flex: 1 }}>
       <AddTodoBtn setShowNewNoteModal={setShowNewNoteModal} />
@@ -30,6 +43,7 @@ function Home() {
         setSelectedCategory={setSelectedCategory}
         selectedCategory={selectedCategory}
       />
+      <Text>{selectedCategory}</Text>
       {notes && notes?.length && notes?.length > 0 ? (
         <View style={style.listContainer}>
           <FlatList

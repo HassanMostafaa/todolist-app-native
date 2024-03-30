@@ -11,6 +11,7 @@ export const DisplayCard: FunctionComponent<INote> = ({
   icon,
   category,
   noteColor,
+  id,
 }) => {
   const [fontLoaded] = useFonts({
     "Roboto-Condensed-Thin": require("../../assets/fonts/RobotoCondensed-Thin.ttf"),
@@ -20,11 +21,7 @@ export const DisplayCard: FunctionComponent<INote> = ({
   const font = style({}).font;
 
   if (!fontLoaded) {
-    return (
-      <View>
-        <Text>...</Text>
-      </View>
-    );
+    return <View></View>;
   }
   return (
     <View style={[style({ noteColor }).container]}>
@@ -47,6 +44,7 @@ export const DisplayCard: FunctionComponent<INote> = ({
         )}
       </View>
       {text && <Text style={[font, style({}).cardText]}>{text}</Text>}
+      <Text style={{ fontSize: 12, color: "red" }}>{id && id}</Text>
     </View>
   );
 };

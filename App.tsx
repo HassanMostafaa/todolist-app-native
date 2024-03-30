@@ -1,6 +1,6 @@
 import { StatusBar } from "expo-status-bar";
 import { View, StyleSheet, SafeAreaView } from "react-native";
-import SplashScreen from "./screens/splash-screen/SplashScreen";
+import { SplashScreen } from "./screens/splash-screen/SplashScreen";
 import { useEffect, useState } from "react";
 import { useFonts } from "expo-font";
 import Home from "./screens/home/Home";
@@ -22,6 +22,9 @@ export default function App() {
   useEffect(() => {
     loadSplashScreen();
   }, []);
+  if (!fontLoaded) {
+    return <View></View>;
+  }
   return (
     <SafeAreaView style={style.safeContainer}>
       <View style={style.mainContainer}>

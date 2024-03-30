@@ -15,7 +15,7 @@ import { Ionicons } from "@expo/vector-icons";
 
 interface DropdownMenuProps {
   options: ICategory[];
-  setSelectedCategory: React.Dispatch<React.SetStateAction<ICategory>>;
+  setSelectedCategory: React.Dispatch<React.SetStateAction<ICategory | null>>;
   selectedCategory: string | null;
 }
 
@@ -44,8 +44,8 @@ const DropdownMenu: React.FC<DropdownMenuProps> = ({
     }).start();
   };
 
-  const handleSelectOption = (option: ICategory) => {
-    setSelectedCategory(option);
+  const handleSelectOption = (option: ICategory | null) => {
+    setSelectedCategory(option === "All" ? null : option);
     setIsOpen(false);
     console.log("selected option", option);
   };

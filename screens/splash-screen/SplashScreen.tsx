@@ -5,7 +5,7 @@ import { DisplayCard } from "../../components/display-card/DisplayCard";
 import * as Progress from "react-native-progress";
 import { useEffect, useState } from "react";
 
-function SplashScreen() {
+export const SplashScreen = () => {
   const [fontLoaded] = useFonts({
     "Roboto-Condensed-Thin": require("../../assets/fonts/RobotoCondensed-Thin.ttf"),
     "Roboto-Condensed": require("../../assets/fonts/RobotoCondensed-Medium.ttf"),
@@ -20,11 +20,7 @@ function SplashScreen() {
   }, []);
 
   if (!fontLoaded) {
-    return (
-      <View>
-        <Text>...</Text>
-      </View>
-    );
+    return <View></View>;
   }
   return (
     <View style={style.container}>
@@ -77,6 +73,4 @@ function SplashScreen() {
       </View>
     </View>
   );
-}
-
-export default SplashScreen;
+};

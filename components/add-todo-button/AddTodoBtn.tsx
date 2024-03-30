@@ -12,6 +12,9 @@ function AddTodoBtn({
     "Roboto-Condensed": require("../../assets/fonts/RobotoCondensed-Medium.ttf"),
     "Roboto-Condensed-Light": require("../../assets/fonts/RobotoCondensed-Light.ttf"),
   });
+  if (!fontLoaded) {
+    return <View></View>;
+  }
   return (
     <View style={style.header}>
       <Text style={style.headerText}>Your Notes</Text>

@@ -13,13 +13,14 @@ import {
   Pressable,
 } from "react-native";
 import { categories } from "../../screens/home/Home";
+import uuid from "react-native-uuid";
 
 interface IModalProps {
   visible: boolean;
   setNotes: React.Dispatch<React.SetStateAction<INote[]>>;
   setShowNewNoteModal: React.Dispatch<React.SetStateAction<boolean>>;
-  selectedCategory: ICategory;
-  setSelectedCategory: React.Dispatch<React.SetStateAction<ICategory>>;
+  selectedCategory: ICategory | null;
+  setSelectedCategory: React.Dispatch<React.SetStateAction<ICategory | null>>;
 }
 
 type ButtonProps = {
@@ -60,23 +61,23 @@ export const NewNoteModal: FunctionComponent<IModalProps> = ({
   const closeModal = (): void => setShowNewNoteModal(false);
 
   const [note, setNote] = useState<INote>({
-    category: selectedCategory,
+    category: selectedCategory ?? "All",
     createdAt: new Date(),
     text: "",
     title: "",
     noteColor: "#A3FF94",
+    id: "",
   });
 
   const addNote = (): void => {
-    console.log({ note });
-
-    setNotes((prev) => [...prev, note]);
+    setNotes((prev) => [...prev, { ...note, id: uuid.v4() }]);
     setNote({
-      category: selectedCategory,
+      category: selectedCategory ?? "All",
       createdAt: new Date(),
       text: "",
       title: "",
       noteColor: "#A3FF94",
+      id: "",
     });
     setTimeout(() => {
       setShowNewNoteModal(false);
@@ -101,7 +102,7 @@ export const NewNoteModal: FunctionComponent<IModalProps> = ({
                 <CategoryButton
                   key={index}
                   label={category}
-                  selectedCategory={selectedCategory}
+                  selectedCategory={selectedCategory ?? "All"}
                   onPress={() => {
                     setSelectedCategory(category),
                       setNote((prev) => ({ ...prev, category }));

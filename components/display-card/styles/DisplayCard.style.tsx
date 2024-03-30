@@ -11,7 +11,6 @@ const style = ({ noteColor }: { noteColor?: INoteColor }) =>
       borderColor: "#333333d8",
       backgroundColor: noteColor ?? "white",
       padding: 12,
-      flex: 1,
       flexGrow: 1,
       flexShrink: 1,
       borderRadius: 8,
